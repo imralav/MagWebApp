@@ -1,58 +1,110 @@
 var gulp = require('gulp');
 var connect = require('gulp-connect');
+var rename = require('gulp-rename');
 var concat = require('gulp-concat');
 var sourcemaps = require('gulp-sourcemaps');
+var jshint = require('gulp-jshint');
+var templateCache = require('gulp-angular-templatecache');
 
 var distPath = './dist';
-var distGlob = distPath + '/**/*';
-var appPath = './app';
-var bowerComponentsPath = './bower_components';
-var minJsGlob = '/**/*.min.js';
-var bowerJsGlob = bowerComponentsPath + minJsGlob;
-var jsGlob = '/**/*.js';
-var allJsGlob = appPath + jsGlob;
-var allHtmlGlob = appPath + '/**/*.html';
-var allCssGlob = appPath + '/**/*.css';
+var paths = {
+    dist: distPath,
+    jsDist: distPath + '/js',
+    fontsDist: distPath + '/fonts',
+    l18nDist: distPath + '/l18n',
+    app: './app',
+    bower: './bower_components',
+    backendResources: '../backend/src/main/resources/static'
+};
 
-var backendResourcesPath = '../backend/src/main/resources/static';
+var globs = {
+    dist: paths.dist + '/**/*',
+    allJs: paths.app + '/**/*.js',
+    indexHtml: paths.app + '/index.html',
+    templates: paths.app + '/components/**/*.html',
+    allCss: paths.app + '/**/*.css',
+    bowerJs: paths.bower + '/**/*.min.js',
+    bootstrapCss: paths.bower + '/bootstrap/dist/css/*.min.css',
+    glyphiconFonts: paths.bower + '/bootstrap/dist/fonts/*.*',
+    l18n: paths.app + '/l18n/*.json'
+};
 
 gulp.task('connect', ['build'], function (done) {
     connect.server({
-        root: distPath,
+        root: paths.dist,
         livereload: true
     });
     done();
 });
 
-gulp.task('build-js', function () {
-    return gulp.src([bowerJsGlob, allJsGlob])
+gulp.task('build:js:custom', ['lint'], function() {
+    return gulp.src(globs.allJs)
         .pipe(sourcemaps.init())
         .pipe(concat('app.js'))
         .pipe(sourcemaps.write())
-        .pipe(gulp.dest(distPath));
-});
-gulp.task('build-html', function () {
-    return gulp.src(allHtmlGlob)
-        .pipe(gulp.dest(distPath));
+        .pipe(gulp.dest(paths.jsDist));
 });
 
-gulp.task('build-css', function () {
-    return gulp.src(allCssGlob)
+gulp.task('build:js:3rdparty', function() {
+    return gulp.src(globs.bowerJs)
+        .pipe(rename({dirname: ''}))
+        .pipe(gulp.dest(paths.jsDist));
+});
+
+gulp.task('build:js', ['build:js:custom', 'build:js:3rdparty']);
+
+gulp.task('lint', function() {
+    return gulp.src(globs.allJs)
+        .pipe(jshint())
+        .pipe(jshint.reporter('jshint-stylish'));
+});
+
+gulp.task('build:html', ['build:html:copy-index', 'build:html:directive-templates']);
+
+gulp.task('build:html:copy-index', function() {
+    return gulp.src(globs.indexHtml)
+        .pipe(gulp.dest(paths.dist));
+});
+
+gulp.task('build:html:directive-templates', function() {
+    return gulp.src(globs.templates)
+        .pipe(templateCache('templates.js', {
+            module: 'magwebapp.templates',
+            standalone: true
+        }))
+        .pipe(gulp.dest(paths.jsDist));
+});
+
+gulp.task('build:css', function () {
+    return gulp.src([globs.allCss, globs.bootstrapCss])
         .pipe(concat('styles.css'))
-        .pipe(gulp.dest(distPath));
+        .pipe(gulp.dest(paths.dist));
 });
 
-gulp.task('build', ['build-js', 'build-html', 'build-css']);
+gulp.task('build:l18n', function() {
+    return gulp.src(globs.l18n)
+        .pipe(gulp.dest(paths.l18nDist));
+});
+
+gulp.task('build:fonts', function() {
+    return gulp.src(globs.glyphiconFonts)
+        .pipe(gulp.dest(paths.fontsDist));
+});
+
+gulp.task('build', ['build:js', 'build:html', 'build:css', 'build:l18n', 'build:fonts']);
+
 gulp.task('copy-resources-to-backend', function () {
-    return gulp.src(distGlob)
-        .pipe(gulp.dest(backendResourcesPath));
+    return gulp.src(globs.dist)
+        .pipe(gulp.dest(paths.backendResources));
 });
 
 gulp.task('watch', function () {
-    gulp.watch(allJsGlob, ['build-js']);
-    gulp.watch(allHtmlGlob, ['build-html']);
-    gulp.watch(allCssGlob, ['build-css']);
-    gulp.watch(distGlob, ['copy-resources-to-backend'])
+    gulp.watch(globs.allJs, ['build:js']);
+    gulp.watch(globs.indexHtml, ['build:html:copy-index']);
+    gulp.watch(globs.templates, ['build:html:directive-templates']);
+    gulp.watch(globs.allCss, ['build:css']);
+    gulp.watch(globs.l18n, ['build:l18n']);
+    gulp.watch(globs.dist, ['copy-resources-to-backend'])
 });
 
 gulp.task('dev', ['build', 'connect', 'watch']);
