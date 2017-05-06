@@ -1,5 +1,5 @@
 <div class="row navigation-panel text-center">
-    <div class="col-xs-1 left-icon"><span class="{{vm.leftIcon}}"></span></div>
+    <div class="col-xs-1 left-icon" ng-click="vm.leftRedirectTo()"><span class="{{vm.leftIcon}}"></span></div>
     <div class="col-xs-10 nav-section-name" data-ng-click="vm.toggleLanguage()">{{ vm.sectionName | translate}}</div>
-    <div class="col-xs-1 right-icon"><span class="{{vm.rightIcon}}"></span></div>
+    <div class="col-xs-1 right-icon" ng-click="vm.rightRedirectTo()"><span class="{{vm.rightIcon}}"></span></div>
 </div>
