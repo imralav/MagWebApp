@@ -5,12 +5,12 @@
         .module('magwebapp')
         .directive('navbar', navbar);
 
-    navbar.$inject = [];
     function navbar() {
         return {
             restrict: 'E',
             controller: Controller,
             controllerAs: 'vm',
+            scope: {},
             bindToController: {
                 sectionName: '@',
                 leftIcon: '@',
