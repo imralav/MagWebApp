@@ -1,0 +1,12 @@
+.access-check-button {
+    background-color: #C9C9C9;
+    border-radius: 0 !important;;
+    border: 3px solid #D8D8D8 !important;
+    border-right-color: #bababa !important;;
+    border-bottom-color: #bababa !important;;
+    width: 75%;
+}
+
+.access-check-row {
+    margin: 15px 0;
+}

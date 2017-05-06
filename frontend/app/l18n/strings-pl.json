@@ -1,4 +1,7 @@
 {
   "DATA": "Dane",
-  "CAMERA": "Kamera"
+  "CAMERA": "Kamera",
+  "CHECK_PHOTOS": "Sprawdź zdjęcia",
+  "CHECK_CONTACTS": "Sprawdź kontakty",
+  "CHECK_MESSAGES": "Sprawdź SMS"
 }

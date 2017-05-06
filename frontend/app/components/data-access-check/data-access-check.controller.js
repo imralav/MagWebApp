@@ -5,10 +5,8 @@
         .module('magwebapp')
         .controller('DataAccessCheckController', DataAccessCheckController);
 
-    DataAccessCheckController.$inject = ['$scope'];
-    function DataAccessCheckController($scope) {
+    DataAccessCheckController.$inject = ['Upload', '$timeout'];
+    function DataAccessCheckController(Upload, $timeout) {
         var vm = this;
-        vm.test = "siema";
-        $scope.test2 = 'siems2';
     }
 })();
