@@ -28,7 +28,8 @@ var globs = {
     bootstrapCss: paths.bower + '/bootstrap/dist/css/*.min.css',
     glyphiconFonts: paths.bower + '/bootstrap/dist/fonts/*.*',
     l18n: paths.app + '/l18n/*.json',
-    cameraPreview: 'cordova/plugins/cordova-plugin-camera-preview/www/*.js'
+    cameraPreview: 'cordova/plugins/cordova-plugin-camera-preview/www/*.js',
+    adapter: paths.bower + '/webrtc-adapter/release/adapter.js'
 };
 
 gulp.task('clean', ['clean:dist']);
@@ -54,7 +55,7 @@ gulp.task('build:js:custom', ['lint'], function() {
 });
 
 gulp.task('build:js:3rdparty', function() {
-    return gulp.src([globs.bowerJs, globs.cameraPreview])
+    return gulp.src([globs.bowerJs, globs.cameraPreview, globs.adapter])
         .pipe(rename({dirname: ''}))
         .pipe(gulp.dest(paths.jsDist));
 });
