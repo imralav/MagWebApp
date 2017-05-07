@@ -11,7 +11,9 @@
                     controllerAs: 'vm'
                 })
                 .when('/camera', {
-                    templateUrl: 'camera-access-check/camera-access-check.html'
+                    templateUrl: 'camera-access-check/camera-access-check.html',
+                    controller: 'CameraAccessCheckController',
+                    controllerAs: 'vm'
                 })
                 .otherwise('/data');
         });

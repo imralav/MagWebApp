@@ -5,8 +5,18 @@
         .module('magwebapp')
         .controller('DataAccessCheckController', DataAccessCheckController);
 
-    DataAccessCheckController.$inject = ['Upload', '$timeout'];
-    function DataAccessCheckController(Upload, $timeout) {
+    DataAccessCheckController.$inject = ['$uibModal'];
+    function DataAccessCheckController($uibModal) {
         var vm = this;
+        vm.openPhotoCheckModal = openPhotoCheckModal;
+
+        function openPhotoCheckModal() {
+            $uibModal.open({
+                controller: 'PhotoCheckModalController',
+                controllerAs: 'vm',
+                size: 'md',
+                templateUrl: 'data-access-check/photo-check-modal/photo-check-modal.html'
+            });
+        }
     }
 })();

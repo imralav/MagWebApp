@@ -1,0 +1,31 @@
+<div class="padding-25">
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <form name="fileLoadForm" style="display: inline-block;">
+                <fieldset>
+                    <legend>Upload on form submit</legend>
+                    <br>file:
+                    <input type="file" ngf-select ng-model="file" name="file"
+                           accept="*/*" ngf-max-size="2MB" required
+                           ngf-model-invalid="errorfile">
+                    <i ng-show="fileLoadForm.file.$error.required">*required</i><br>
+                    <i ng-show="fileLoadForm.file.$error.maxSize">file too large
+                        {{errorfile.size / 1000000|number:1}}MB: max 2M</i>
+                    <input type="button" class="btn btn-default" ng-click="file = null" ng-show="file" value="Remove">
+                    <br>
+                    <span class="err" ng-show="errorMsg">{{errorMsg}}</span>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <img class="photo-preview" ng-show="fileLoadForm.file.$valid" ngf-thumbnail="file"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <input type="button" value="{{ 'CLOSE' | translate }}" class="btn btn-primary" ng-click="vm.close()"/>
+        </div>
+    </div>
+</div>

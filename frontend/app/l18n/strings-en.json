@@ -3,5 +3,6 @@
   "CAMERA": "Camera",
   "CHECK_PHOTOS": "Check photos",
   "CHECK_CONTACTS": "Check contacts",
-  "CHECK_MESSAGES": "Check messages"
+  "CHECK_MESSAGES": "Check messages",
+  "CLOSE": "Close"
 }

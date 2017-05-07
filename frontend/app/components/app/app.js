@@ -6,6 +6,7 @@
             'ngFileUpload',
             'ngRoute',
             'magwebapp.templates',
-            'pascalprecht.translate'
+            'pascalprecht.translate',
+            'ui.bootstrap'
         ]);
 })();

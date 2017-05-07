@@ -5,6 +5,7 @@ var concat = require('gulp-concat');
 var sourcemaps = require('gulp-sourcemaps');
 var jshint = require('gulp-jshint');
 var templateCache = require('gulp-angular-templatecache');
+var clean = require('gulp-clean');
 
 var distPath = './dist';
 var paths = {
@@ -26,8 +27,15 @@ var globs = {
     bowerJs: paths.bower + '/**/*.min.js',
     bootstrapCss: paths.bower + '/bootstrap/dist/css/*.min.css',
     glyphiconFonts: paths.bower + '/bootstrap/dist/fonts/*.*',
-    l18n: paths.app + '/l18n/*.json'
+    l18n: paths.app + '/l18n/*.json',
+    cameraPreview: 'cordova/plugins/cordova-plugin-camera-preview/www/*.js'
 };
+
+gulp.task('clean', ['clean:dist']);
+
+gulp.task('clean:dist', function() {
+    return gulp.src(paths.dist, {read: false}).pipe(clean());
+});
 
 gulp.task('connect', ['build'], function (done) {
     connect.server({
@@ -46,7 +54,7 @@ gulp.task('build:js:custom', ['lint'], function() {
 });
 
 gulp.task('build:js:3rdparty', function() {
-    return gulp.src(globs.bowerJs)
+    return gulp.src([globs.bowerJs, globs.cameraPreview])
         .pipe(rename({dirname: ''}))
         .pipe(gulp.dest(paths.jsDist));
 });
